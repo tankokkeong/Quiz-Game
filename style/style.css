@@ -1,0 +1,90 @@
+*{
+    padding: 0;
+    margin: 0;
+}
+
+#quiz-container{
+    width: 100%;
+    height: 100%;
+    min-height: 100vh;
+    background-color: rgb(2, 0, 31);
+    padding: 20px;
+}
+
+#quiz-header{
+    background-color: rgb(3, 51, 97);;
+}
+
+#quiz-timer{
+    font-size: 25px;
+    margin-top: 10px;
+    margin-left: 5px;
+}
+
+.quiz-row{
+    width: 100%;
+    margin: 0;
+}
+
+.box-design{
+    width: 100%;
+    border: 1px solid white;
+    margin-top: 20px;
+}
+
+#player-scores{
+    padding: 20px;
+}
+
+.score-section{
+    font-size: 20px;
+}
+
+#player-ranking{
+    padding: 20px;
+}
+
+#question-container{
+    padding: 20px;
+    padding-bottom: 50px;
+}
+
+.option{
+    color: white;
+    margin-top: 30px;
+}
+
+.option-input{
+    position: relative;
+    top: 1.5px;
+    margin-right: 5px;
+}
+
+#player-ranking-title{
+    font-size: 20px;
+}
+
+#tips{
+    font-size: 15px;
+}
+
+#start-game-container{
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    background-color: black;
+    z-index: 1000;
+    opacity: 0.7;
+}
+
+#start-input-container{
+    background-color: white;
+    width: 400px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2000;
+    border-radius: 20px;
+    padding: 20px;
+}

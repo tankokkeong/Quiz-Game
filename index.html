@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="overflow-y: hidden;">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -16,6 +16,9 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://kenny-framework.netlify.app/font-awesome-4.7.0.css">
     <script src="https://kenny-framework.netlify.app/font-awesome-4.7.0.js"></script>
+
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="style/style.css">
 
     <!-- JavaScript -->
     <script src="js/script.js"></script>
@@ -42,4 +45,119 @@
         const app = initializeApp(firebaseConfig);
       </script>
 </body>
+  <div id="start-game-container">
+
+  </div>
+
+  <div id="start-input-container">
+    <div class="text-center mt-3">
+      <h1>Start Game</h1>
+    </div>
+
+    <div class="mt-3 mb-3">
+      <input type="text" class="form-control" placeholder="Your Name">
+    </div>
+
+    <div class="text-center">
+      <button class="btn btn-success">Start</button>
+    </div>
+  </div>
+
+  <div id="quiz-container">
+      <div class="pt-1 pb-1 text-center text-light" id="quiz-header">
+        <h3>Quiz Game</h3>
+      </div>
+
+      <div class="row quiz-row">
+        <div class="col-sm-8 col-xl-9">
+
+          <div class="text-light mb-1" id="quiz-timer">
+            Time Left: 10 seconds
+
+            <div class="" id="tips">
+              Tips: The quicker you answer, the more scores you get.
+            </div>
+          </div>
+
+          <div class="box-design mt-2" id="question-container">
+            <div id="question-title" class="text-light">
+              1. Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ratione qui tenetur consequuntur veritatis obcaecati, doloribus quidem? Inventore, minima placeat! Dignissimos necessitatibus sit cupiditate nesciunt ut, 
+              pariatur vero minus aliquam quaerat!
+            </div>
+
+            <div id="option-1" class="option">
+              <input type="checkbox" class="option-input">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Quasi, blanditiis?
+            </div>
+
+            <div id="option-2" class="option">
+              <input type="checkbox" class="option-input">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Quasi, blanditiis?
+            </div>
+
+            <div id="option-3" class="option">
+              <input type="checkbox" class="option-input">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Quasi, blanditiis?
+            </div>
+
+            <div id="option-4" class="option">
+              <input type="checkbox" class="option-input">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Quasi, blanditiis?
+            </div>
+          </div>
+        </div>
+
+        <div class="col-sm-4 col-xl-3">
+          <div class="box-design text-light" id="player-scores">
+            <div class="score-section">
+              Total Scores:
+              <span id="total-scores">100</span>
+            </div>
+
+            <div class="score-section">
+              Continuous Correct Answer:
+              <span id="continuous-correct">5</span>
+            </div>
+
+            <div class="score-section">
+              Total Correct Answer:
+              <span id="total-correct">5</span>
+            </div>
+          </div>
+
+          <div class="box-design text-light" id="player-ranking">
+            <div class="text-center" id="player-ranking-title">
+              Top 10 Players Ranking
+            </div>
+
+            <div class="row mt-3">
+              <div class="col text-center">
+                Name
+              </div>
+
+              <div class="col text-center">
+                Score
+              </div>
+
+            </div>
+
+            <div id="ranking-list">
+              <div class="row mt-3">
+                <div class="col text-center">
+                  John Doe
+                </div>
+  
+                <div class="col text-center">
+                  100
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+      
+  </div>
 </html>
