@@ -1,6 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.8.1/firebase-app.js";
-import { getDatabase, ref, set, child, get } from "https://www.gstatic.com/firebasejs/9.8.1/firebase-database.js";
+import { getDatabase, ref, set, child, get, onValue
+,update } from "https://www.gstatic.com/firebasejs/9.8.1/firebase-database.js";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -22,6 +23,11 @@ const dbRef = ref(getDatabase());
 
 //Default function called
 if(checkStartGame()){
+
+    //Update user scores
+    updateUserScores();
+
+    //Display the question
     readQuestion();
 }
 
@@ -34,27 +40,33 @@ $("#start-game-btn").click(function(){
         get(child(dbRef, `users/${userName}`)).then((snapshot) => {
             if (snapshot.exists()) {
             
-            alert("This user already exists! Please type a new name");
+                alert("This user already exists! Please type a new name");
 
-            //Empty the input field
-            name.value = "";
+                //Empty the input field
+                name.value = "";
 
             } else {
 
-            //Create session storage
-            sessionStorage.setItem("quiz-name", userName);
-            
-            set(ref(db, 'users/' + userName), {
-                username: userName,
-                scores: 0,
-                totalCorrect: 0,
-                continuousCorrect: 0
-            });
+                //Create session storage
+                sessionStorage.setItem("quiz-name", userName);
+                
+                set(ref(db, 'users/' + userName), {
+                    username: userName,
+                    scores: 0,
+                    totalCorrect: 0,
+                    continuousCorrect: 0,
+                    highestScore: 0
+                });
 
-            //Remove Cover
-            removeCover();
+                playerName = userName;
 
-            readQuestion();
+                //Remove Cover
+                removeCover();
+
+                //Update user scores
+                updateUserScores();
+
+                readQuestion();
             }
         }).catch((error) => {
             console.error(error);
@@ -67,35 +79,80 @@ $("#start-game-btn").click(function(){
 
 $(".option-input").click(function(event){
 
-    //Disable all the input
-    disabledOptions(event.target.value);
+    if(answered != true){
+        //Disable all the input
+        disabledOptions(event.target.value);
 
-    //Check Answer
-    get(child(dbRef, `Questions/Question-${randomQuestion}`)).then((snapshot) => {
-        if (snapshot.exists()) {
+        //Change answered to true
+        answered = true;
 
-            var statusDisplay = document.getElementById("answer-status-display");
-            var iconDisplay = document.getElementById("answer-icon-display");
+        //Check Answer
+        get(child(dbRef, `Questions/Question-${randomQuestion}`)).then((snapshot) => {
+            if (snapshot.exists()) {
 
-            if(snapshot.val().answer == event.target.value){
-                iconDisplay.innerHTML = `<i class="fa fa-check-circle text-success answer-status-mark" aria-hidden="true"></i>`;
-                statusDisplay.innerHTML = "Correct";
+                var statusDisplay = document.getElementById("answer-status-display");
+                var iconDisplay = document.getElementById("answer-icon-display");
+
+                if(snapshot.val().answer == event.target.value){
+                    iconDisplay.innerHTML = `<i class="fa fa-check-circle text-success answer-status-mark" aria-hidden="true"></i>`;
+                    statusDisplay.innerHTML = "Correct";
+
+                    get(child(dbRef, `users/${playerName}`)).then((userSnapshot) => {
+
+                        console.log(JSON.stringify(userSnapshot.val()))
+                        var totalScores = userSnapshot.val().scores;
+                        var continuousCorrect = userSnapshot.val().continuousCorrect;
+                        var totalCorrect = userSnapshot.val().totalCorrect;
+
+                        //Score calculation
+                        var scoreOfTheRound;
+
+                        if(answerTime >= 10){
+                            scoreOfTheRound = 5 + (answerTime - 10) + continuousCorrect;
+                        }
+                        else{
+                            scoreOfTheRound = 0;
+                        }
+
+                        var newTotal = totalScores + scoreOfTheRound;
+                        
+                        //Increase the total correct
+                        totalCorrect++;
+                        continuousCorrect++;
+
+                        //Update firebase
+                        var newData = {
+                            scores : newTotal,
+                            continuousCorrect: continuousCorrect,
+                            totalCorrect: totalCorrect
+                        }
+
+                        const updates = {};
+                        updates['users/' + playerName] = newData;
+
+                        update(ref(db), updates);
+                    });
+                }
+                else{
+                    iconDisplay.innerHTML = `<i class="fa fa-times text-danger answer-status-mark" aria-hidden="true"></i>`;
+                    statusDisplay.innerHTML = "Wrong";
+                }
+
+                $("#answer-status").fadeIn();
+                removeAnswerStatus();
+
+            } else {
+                alert("Error Occured");
             }
-            else{
-                iconDisplay.innerHTML = `<i class="fa fa-times text-danger answer-status-mark" aria-hidden="true"></i>`;
-                statusDisplay.innerHTML = "Wrong";
-            }
-
-            $("#answer-status").fadeIn();
-            removeAnswerStatus();
-
-        } else {
-            alert("Error Occured");
-        }
-    }).catch((error) => {
-        console.error(error);
-    });
-
+        }).catch((error) => {
+            console.error(error);
+        });
+    }
+    else{
+        //Check the box by default
+        event.target.checked = true;
+    }
+    
 });
 
 function readQuestion(){
@@ -117,6 +174,9 @@ function readQuestion(){
         //Insert record
         get(child(dbRef, `Questions/Question-${randomQuestion}`)).then((snapshot) => {
             if (snapshot.exists()) {
+
+            //Change answered to false
+            answered = false;
 
             //Display options
             displayOptions();
@@ -190,4 +250,29 @@ function displayAnswerTimer(){
             readQuestion();
         }
     }
+}
+
+function updateUserScores(){
+    //Read user info
+    const userRef = ref(db, 'users/' + playerName + '/');
+    onValue(userRef, (snapshot) => {
+        const data = snapshot.val();
+
+        //Assign the user info
+        playerInfo.totalScores = snapshot.val().scores;
+        playerInfo.continuousCorrect = snapshot.val().continuousCorrect;
+        playerInfo.totalCorrect = snapshot.val().totalCorrect
+        playerInfo.highestScore = snapshot.val().hhighestScore;
+
+        //Update the score board
+        var score1 = document.getElementById("total-scores");
+        var score2 = document.getElementById("continuous-correct");
+        var score3 = document.getElementById("total-correct");
+
+        score1.innerHTML = playerInfo.totalScores;
+        score2.innerHTML = playerInfo.continuousCorrect;
+        score3.innerHTML = playerInfo.totalCorrect;
+
+        //console.log("Data get " + JSON.stringify(playerInfo))
+    });
 }

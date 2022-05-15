@@ -3,12 +3,22 @@ var randomQuestion;
 var questionCount = 1;
 var readingTime = 10;
 var answerTime = 15;
+var answered = false;
+var playerName;
+var playerInfo = 
+{
+    totalScores: 0,
+    continuousCorrect : 0,
+    totalCorrect : 0,
+    highestScore: 0
+};
 
 function checkStartGame(){
     var name = sessionStorage.getItem("quiz-name");
 
     if(name && name.trim().length != 0){
         removeCover();
+        playerName = name.trim();
         return true;
     }
     else{
