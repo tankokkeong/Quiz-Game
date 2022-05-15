@@ -70,7 +70,7 @@
             "option_2": "Richard Nixon",
             "option_3": "George W. Bush",
             "option_4": "Barack Obama",
-            "answer": "Nixon"
+            "answer": "Richard Nixon"
         },
         "Question-10":{
             "question": "What does the “D” in “D-Day” stand for?",
@@ -302,7 +302,7 @@
             "option_2": "Bank of America Tower",
             "option_3": "One World Trade Center",
             "option_4": "Statue of Liberty",
-            "answer": "ne World Trade Center"
+            "answer": "One World Trade Center"
         },
         "Question-39":{
             "question": "What does the “E” in Chuck E. Cheese stand for?",

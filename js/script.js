@@ -21,8 +21,6 @@ const app = initializeApp(firebaseConfig);
 const db = getDatabase();
 const dbRef = ref(getDatabase());
 
-displayRanking();
-
 //Default function called
 if(checkStartGame()){
 
@@ -34,7 +32,16 @@ if(checkStartGame()){
 
     //Display the question
     readQuestion();
+
+    //Display the current ranking
+    displayRanking();
 }
+
+$("#play-again-btn").click(function(){
+    resetScores();
+    readQuestion();
+    removeEndGameCover();
+});
 
 $("#start-game-btn").click(function(){
     var name = document.getElementById("name-input");
@@ -104,7 +111,6 @@ $(".option-input").click(function(event){
 
                     get(child(dbRef, `users/${playerName}`)).then((userSnapshot) => {
 
-                        console.log(JSON.stringify(userSnapshot.val()))
                         var totalScores = userSnapshot.val().scores;
                         var continuousCorrect = userSnapshot.val().continuousCorrect;
                         var totalCorrect = userSnapshot.val().totalCorrect;
@@ -284,6 +290,9 @@ function displayAnswerTimer(){
         if(questionCount <= 20){
             readQuestion();
         }
+        else{
+            endGame();
+        }
     }
 }
 
@@ -366,6 +375,18 @@ function displayRanking(){
         });
     });
 
-    
+}
 
+function endGame(){
+
+    var displayEndScore = document.getElementById("total-scores-end");
+
+    //Display end game cover
+    displayEndGameCover();
+
+    //Reset all the attributes
+    randomArray = [];
+    questionCount = 1;
+
+    displayEndScore.innerHTML = "Your final scores are " + playerInfo.totalScores + "!";
 }

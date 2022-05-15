@@ -70,3 +70,21 @@ function removeAnswerStatus(){
         $("#answer-status").fadeOut();
     },2000);
 }
+
+function displayEndGameCover(){
+    var cover = document.getElementById("end-game-container");
+    var input = document.getElementById("end-input-container");
+
+    //display the cover
+    cover.style.display = "";
+    input.style.display = "";
+}
+
+function removeEndGameCover(){
+    var cover = document.getElementById("end-game-container");
+    var input = document.getElementById("end-input-container");
+
+    //Remove the cover
+    cover.style.display = "none";
+    input.style.display = "none";
+}
