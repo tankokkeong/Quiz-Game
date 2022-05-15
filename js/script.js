@@ -124,7 +124,9 @@ $(".option-input").click(function(event){
                         var newData = {
                             scores : newTotal,
                             continuousCorrect: continuousCorrect,
-                            totalCorrect: totalCorrect
+                            totalCorrect: totalCorrect,
+                            highestScore: userSnapshot.val().highestScore,
+                            username: playerName
                         }
 
                         const updates = {};
@@ -136,6 +138,28 @@ $(".option-input").click(function(event){
                 else{
                     iconDisplay.innerHTML = `<i class="fa fa-times text-danger answer-status-mark" aria-hidden="true"></i>`;
                     statusDisplay.innerHTML = "Wrong";
+
+                    get(child(dbRef, `users/${playerName}`)).then((userSnapshot) => {
+
+                        console.log(JSON.stringify(userSnapshot.val()))
+                        var totalScores = userSnapshot.val().scores;
+                        var continuousCorrect = userSnapshot.val().continuousCorrect;
+                        var totalCorrect = userSnapshot.val().totalCorrect;
+
+                        //Update firebase
+                        var newData = {
+                            scores : totalScores,
+                            continuousCorrect: 0,
+                            totalCorrect: totalCorrect,
+                            highestScore: userSnapshot.val().highestScore,
+                            username: playerName
+                        }
+
+                        const updates = {};
+                        updates['users/' + playerName] = newData;
+
+                        update(ref(db), updates);
+                    });
                 }
 
                 $("#answer-status").fadeIn();
@@ -262,7 +286,7 @@ function updateUserScores(){
         playerInfo.totalScores = snapshot.val().scores;
         playerInfo.continuousCorrect = snapshot.val().continuousCorrect;
         playerInfo.totalCorrect = snapshot.val().totalCorrect
-        playerInfo.highestScore = snapshot.val().hhighestScore;
+        playerInfo.highestScore = snapshot.val().highestScore;
 
         //Update the score board
         var score1 = document.getElementById("total-scores");
