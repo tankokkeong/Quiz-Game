@@ -21,7 +21,7 @@
     <link rel="stylesheet" href="style/style.css">
 
     <!-- JavaScript -->
-    <script src="js/script.js"></script>
+    <script src="js/helper.js"></script>
 </head>
 <body>
   <div id="start-game-container">
@@ -48,10 +48,17 @@
       </div>
 
       <div class="row quiz-row">
-        <div class="col-sm-8 col-xl-9">
+        <div class="col-sm-8 col-xl-9" id="quiz-col">
+
+          <div id="answer-status" class="text-center" style="display: none;">
+            <!-- <i class="fa fa-times text-danger answer-status-mark" aria-hidden="true"></i> -->
+            <!-- <i class="fa fa-check-circle text-success answer-status-mark" aria-hidden="true"></i> -->
+            <span id="answer-icon-display"></span>
+            <span id="answer-status-display"></span>
+          </div>
 
           <div class="text-light mb-1" id="quiz-timer">
-            Time Left: 10 seconds
+            <span id="timer-display">Reading Time Left: 10</span> second(s)
 
             <div class="" id="tips">
               Tips: The quicker you answer, the more scores you get.
@@ -65,28 +72,28 @@
             </div>
 
             <div class="option">
-              <input type="checkbox" class="option-input">
+              <input type="checkbox" class="option-input" disabled="true">
               <span id="option-1">
                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Quasi, blanditiis?
               </span>
             </div>
 
             <div class="option">
-              <input type="checkbox" class="option-input">
+              <input type="checkbox" class="option-input" disabled="true">
               <span id="option-2">              
                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Quasi, blanditiis?
               </span>
             </div>
 
             <div class="option">
-              <input type="checkbox" class="option-input">
+              <input type="checkbox" class="option-input" disabled="true">
               <span id="option-3">
                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Quasi, blanditiis?
               </span>
             </div>
 
             <div class="option">
-              <input type="checkbox" class="option-input">
+              <input type="checkbox" class="option-input" disabled="true">
               <span id="option-4">              
                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Quasi, blanditiis?
               </span>
@@ -98,17 +105,17 @@
           <div class="box-design text-light" id="player-scores">
             <div class="score-section">
               Total Scores:
-              <span id="total-scores">100</span>
+              <span id="total-scores">0</span>
             </div>
 
             <div class="score-section">
               Continuous Correct Answer:
-              <span id="continuous-correct">5</span>
+              <span id="continuous-correct">0</span>
             </div>
 
             <div class="score-section">
               Total Correct Answer:
-              <span id="total-correct">5</span>
+              <span id="total-correct">0</span>
             </div>
           </div>
 
@@ -151,108 +158,7 @@
 </html>
 
 <script type="module">
-  // Import the functions you need from the SDKs you need
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.8.1/firebase-app.js";
-  import { getDatabase, ref, set, child, get } from "https://www.gstatic.com/firebasejs/9.8.1/firebase-database.js";
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
 
-  // Your web app's Firebase configuration
-  const firebaseConfig = {
-    apiKey: "AIzaSyCuZrKwqm5BU5HnTflLAj9id1O5txhFPjQ",
-    authDomain: "quiz-game-bc4ba.firebaseapp.com",
-    databaseURL: "https://quiz-game-bc4ba-default-rtdb.firebaseio.com",
-    projectId: "quiz-game-bc4ba",
-    storageBucket: "quiz-game-bc4ba.appspot.com",
-    messagingSenderId: "1073273640899",
-    appId: "1:1073273640899:web:2b48ac450c133bd6c20f76"
-  };
-
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const db = getDatabase();
-  const dbRef = ref(getDatabase());
-
-  //Default function called
-  if(checkStartGame()){
-    readQuestion();
-  }
-
-  $("#start-game-btn").click(function(){
-    var name = document.getElementById("name-input");
-    if(name.value.trim() != 0){
-        var userName = name.value.trim();
-
-        //Insert record
-        get(child(dbRef, `users/${userName}`)).then((snapshot) => {
-          if (snapshot.exists()) {
-            
-            alert("This user already exists! Please type a new name");
-
-            //Empty the input field
-            name.value = "";
-
-          } else {
-
-            //Create session storage
-            sessionStorage.setItem("quiz-name", userName);
-            
-            set(ref(db, 'users/' + userName), {
-              username: userName,
-              scores: 0,
-              totalCorrect: 0,
-              continuousCorrect: 0
-            });
-
-            //Remove Cover
-            removeCover();
-
-            readQuestion();
-          }
-        }).catch((error) => {
-          console.error(error);
-        });
-    }
-    else{
-      alert("Name cannot be empty!");
-    }
-  });
-
-  function readQuestion(){
-    //Read question
-    var randomQuestion = Math.floor(Math.random() * 151) + 1;
-
-    if(!randomArray.includes(randomQuestion)){
-      //Add a new array element
-      randomArray.push(randomQuestion);
-
-      var questionDisplay = document.getElementById("question-title");
-      var option_1_display = document.getElementById("option-1");
-      var option_2_display = document.getElementById("option-2");
-      var option_3_display = document.getElementById("option-3");
-      var option_4_display = document.getElementById("option-4");
-
-      //Insert record
-      get(child(dbRef, `Questions/Question-${randomQuestion}`)).then((snapshot) => {
-          if (snapshot.exists()) {
-
-            //Display the question details
-            questionDisplay.innerHTML = questionCount + ". " + snapshot.val().question;
-            option_1_display.innerHTML = snapshot.val().option_1;
-            option_2_display.innerHTML = snapshot.val().option_2;
-            option_3_display.innerHTML = snapshot.val().option_3;
-            option_4_display.innerHTML = snapshot.val().option_4;
-
-          } else {
-            alert("Error Occured");
-          }
-      }).catch((error) => {
-        console.error(error);
-      });
-
-    }
-    else{
-      readQuestion();
-    }
-  }
 </script>
+
+<script src="js/script.js" type="module"></script>

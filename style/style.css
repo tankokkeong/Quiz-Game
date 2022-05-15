@@ -88,3 +88,25 @@
     border-radius: 20px;
     padding: 20px;
 }
+
+#quiz-col{
+    position: relative;
+}
+
+#answer-status{
+    padding: 20px;
+    background-color: white;
+    position: absolute;
+    left: 50%;
+    top: 150px;
+    transform: translate(-50%, 0);
+    border-radius: 10px;
+}
+
+.answer-status-mark, #answer-status-display{
+    font-size: 50px;
+}
+
+#answer-status-display{
+    font-weight: bold;
+}
