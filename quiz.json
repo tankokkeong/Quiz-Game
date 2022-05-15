@@ -486,7 +486,7 @@
             "option_2": "180",
             "option_3": "150",
             "option_4": "359",
-            "answer": "360 degrees"
+            "answer": "360"
         },
         "Question-62":{
             "question": "Which city is known as the City of Love?",
@@ -590,7 +590,7 @@
             "option_2": "ghosts",
             "option_3": "aliens",
             "option_4": "time travelers",
-            "answer": "Aliens"
+            "answer": "aliens"
         },
         "Question-75":{
             "question": "The most recent seasons of American Idol have the judges Katy Perry, Lionel Richie, and…",
@@ -990,7 +990,7 @@
             "option_2": "Uranus and Pluto",
             "option_3": "Pluto and Jupiter",
             "option_4": "Neptune and Uranus",
-            "answer": "Neptune + Uranus"
+            "answer": "Neptune and Uranus"
         },
         "Question-125":{
             "question": "What country is Prague in?",
@@ -1146,10 +1146,10 @@
         },
         "Question-144":{
             "question": "Sodium bicarbonate is used in the kitchen as what?",
-            "option_1": "salt",
-            "option_2": "sugar",
-            "option_3": "baking soda",
-            "option_4": "vinegar",
+            "option_1": "Salt",
+            "option_2": "Sugar",
+            "option_3": "Baking soda",
+            "option_4": "Vinegar",
             "answer": "Baking soda"
         },
         "Question-145":{
@@ -1162,10 +1162,10 @@
         },
         "Question-146":{
             "question": "In Ray Bradbury’s novel Fahrenheit 451, what are they burning?",
-            "option_1": "clothes",
-            "option_2": "houses",
-            "option_3": "books",
-            "option_4": "money",
+            "option_1": "Clothes",
+            "option_2": "Houses",
+            "option_3": "Books",
+            "option_4": "Money",
             "answer": "Books"
         },
         "Question-147":{
@@ -1186,10 +1186,10 @@
         },
         "Question-149":{
             "question": "Which water sport is the official sport for the state of Hawaii?",
-            "option_1": "water polo",
-            "option_2": "swimming",
-            "option_3": "water skiing",
-            "option_4": "surfing",
+            "option_1": "Water polo",
+            "option_2": "Swimming",
+            "option_3": "Water skiing",
+            "option_4": "Surfing",
             "answer": "Surfing"
         },
         "Question-150":{

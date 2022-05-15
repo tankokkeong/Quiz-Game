@@ -1,7 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.8.1/firebase-app.js";
 import { getDatabase, ref, set, child, get, onValue
-,update } from "https://www.gstatic.com/firebasejs/9.8.1/firebase-database.js";
+,update,  query, orderByChild, limitToLast  } from "https://www.gstatic.com/firebasejs/9.8.1/firebase-database.js";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -21,8 +21,13 @@ const app = initializeApp(firebaseConfig);
 const db = getDatabase();
 const dbRef = ref(getDatabase());
 
+displayRanking();
+
 //Default function called
 if(checkStartGame()){
+
+    //Reset the score if it is the previous user
+    resetScores();
 
     //Update user scores
     updateUserScores();
@@ -103,6 +108,7 @@ $(".option-input").click(function(event){
                         var totalScores = userSnapshot.val().scores;
                         var continuousCorrect = userSnapshot.val().continuousCorrect;
                         var totalCorrect = userSnapshot.val().totalCorrect;
+                        var highestScore = userSnapshot.val().highestScore;
 
                         //Score calculation
                         var scoreOfTheRound;
@@ -115,6 +121,11 @@ $(".option-input").click(function(event){
                         }
 
                         var newTotal = totalScores + scoreOfTheRound;
+
+                        //Check the highest score
+                        if(newTotal > highestScore){
+                            highestScore = newTotal;
+                        }
                         
                         //Increase the total correct
                         totalCorrect++;
@@ -125,7 +136,7 @@ $(".option-input").click(function(event){
                             scores : newTotal,
                             continuousCorrect: continuousCorrect,
                             totalCorrect: totalCorrect,
-                            highestScore: userSnapshot.val().highestScore,
+                            highestScore: highestScore,
                             username: playerName
                         }
 
@@ -276,6 +287,19 @@ function displayAnswerTimer(){
     }
 }
 
+function resetScores(){
+
+    var previousHighestScore = sessionStorage.getItem("quiz-highest-score");
+
+    set(ref(db, 'users/' + playerName), {
+        username: playerName,
+        scores: 0,
+        totalCorrect: 0,
+        continuousCorrect: 0,
+        highestScore: parseInt(previousHighestScore)
+    });
+}
+
 function updateUserScores(){
     //Read user info
     const userRef = ref(db, 'users/' + playerName + '/');
@@ -297,6 +321,51 @@ function updateUserScores(){
         score2.innerHTML = playerInfo.continuousCorrect;
         score3.innerHTML = playerInfo.totalCorrect;
 
+        sessionStorage.setItem("quiz-highest-score", playerInfo.highestScore);
+
         //console.log("Data get " + JSON.stringify(playerInfo))
     });
+}
+
+function displayRanking(){
+    const ranking = query(ref(db, 'users'), orderByChild('highestScore'), limitToLast(10));
+    var rankingList = document.getElementById("ranking-list");
+    var rankingArray = [];
+
+    //Read user info
+    const userRef = ref(db, 'users/');
+    
+    onValue(userRef, (snapshot) => {
+
+        //Clear the previous ranking
+        rankingList.innerHTML = "";
+        rankingArray = [];
+
+        get(ranking).then((snapshot) =>{
+
+            snapshot.forEach((childSnapshot) => {
+                rankingArray.push(childSnapshot.val());
+            });
+    
+            //reverse the array
+            rankingArray.reverse();
+    
+            for(var i = 0; i < rankingArray.length; i++){
+    
+                rankingList.innerHTML = rankingList.innerHTML + 
+                `<div class="row mt-1">
+                    <div class="col text-center">
+                    ${rankingArray[i].username}
+                    </div>
+    
+                    <div class="col text-center">
+                    ${rankingArray[i].highestScore}
+                    </div>
+                </div>`;
+            }
+        });
+    });
+
+    
+
 }
