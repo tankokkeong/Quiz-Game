@@ -32,10 +32,10 @@ if(checkStartGame()){
 
     //Display the question
     readQuestion();
-
-    //Display the current ranking
-    displayRanking();
 }
+
+//Display the current ranking
+displayRanking();
 
 $("#play-again-btn").click(function(){
     resetScores();
@@ -341,7 +341,7 @@ function displayRanking(){
     var rankingList = document.getElementById("ranking-list");
     var rankingArray = [];
 
-    //Read user info
+    //Listen for the realtime changes
     const userRef = ref(db, 'users/');
     
     onValue(userRef, (snapshot) => {

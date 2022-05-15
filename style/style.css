@@ -75,15 +75,16 @@
     background-color: black;
     z-index: 1000;
     opacity: 0.7;
+    position: fixed;
 }
 
 #start-input-container, #end-input-container{
     background-color: white;
-    width: 400px;
+    width: 80%;
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -30%);
     z-index: 2000;
     border-radius: 20px;
     padding: 20px;
@@ -114,4 +115,22 @@
 #total-scores-end{
     font-size: 20px;
     font-weight: bold;
+}
+
+@media(min-width: 600px){
+    #start-input-container, #end-input-container{
+        width: 600px;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+}
+
+@media (min-width: 1200px){
+    #start-input-container, #end-input-container{
+        width: 600px;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
 }
