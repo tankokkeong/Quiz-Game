@@ -185,6 +185,9 @@ function displayAnswerTimer(){
         
         //Increase the answer count
         questionCount++;
-        readQuestion();
+
+        if(questionCount <= 20){
+            readQuestion();
+        }
     }
 }
